@@ -1,51 +1,25 @@
-[gd_scene load_steps=7 format=4 uid="uid://cg6fskaiqa35m"]
+[gd_scene load_steps=5 format=4 uid="uid://cg6fskaiqa35m"]
 
 [ext_resource type="Texture2D" uid="uid://bvl3fcefnqcpj" path="res://16xicon.svg" id="1_qtxpv"]
 [ext_resource type="PackedScene" uid="uid://csf1e127aw36f" path="res://Scenes/player.tscn" id="2_j5ewf"]
-[ext_resource type="Texture2D" uid="uid://cexedtmeicvh4" path="res://icon.svg" id="3_2edux"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_d7i18"]
-size = Vector2(132, 20)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_k0xlv"]
 texture = ExtResource("1_qtxpv")
 0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_ri3j2"]
 physics_layer_0/collision_layer = 1
-physics_layer_0/collision_mask = 2
+physics_layer_0/collision_mask = 0
 sources/1 = SubResource("TileSetAtlasSource_k0xlv")
 
 [node name="World" type="Node2D"]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-position = Vector2(32, 26)
-collision_mask = 0
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-shape = SubResource("RectangleShape2D_d7i18")
-
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
-tile_map_data = PackedByteArray("AAD+/wEAAQAAAAAAAAD//wEAAQAAAAAAAAAAAAEAAQAAAAAAAAABAAEAAQAAAAAAAAACAAEAAQAAAAAAAAADAAEAAQAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAD+/wEAAQAAAAAAAAD//wEAAQAAAAAAAAAAAAEAAQAAAAAAAAABAAEAAQAAAAAAAAACAAEAAQAAAAAAAAADAAEAAQAAAAAAAAAEAAEAAQAAAAAAAAAEAAAAAQAAAAAAAAD9/wEAAQAAAAAAAAD9/wAAAQAAAAAAAAD9////AQAAAAAAAAAFAAEAAQAAAAAAAAAGAAEAAQAAAAAAAAAHAAEAAQAAAAAAAAD9//3/AQAAAAAAAAD9//7/AQAAAAAAAAD9//z/AQAAAAAAAAD9//v/AQAAAAAAAAD+//v/AQAAAAAAAAD///v/AQAAAAAAAAA=")
 tile_set = SubResource("TileSet_ri3j2")
 
 [node name="Player" parent="." instance=ExtResource("2_j5ewf")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(4.37, 4.37)
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(18, 10)
-scale = Vector2(0.063, 0.086)
-texture = ExtResource("3_2edux")
-
-[node name="Sprite2D2" type="Sprite2D" parent="."]
-position = Vector2(18, -1)
-scale = Vector2(0.063, 0.086)
-texture = ExtResource("3_2edux")
-
-[node name="Sprite2D3" type="Sprite2D" parent="."]
-position = Vector2(18, -12)
-scale = Vector2(0.063, 0.086)
-texture = ExtResource("3_2edux")
