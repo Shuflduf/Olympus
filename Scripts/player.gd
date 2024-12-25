@@ -36,6 +36,7 @@ func _physics_process(delta: float) -> void:
 
 
 func handle_climbing(_delta: float) -> void:
+
     if !climbing:
         var dir := Input.get_axis(&"right", &"left")
         if dir > 0:
@@ -47,6 +48,10 @@ func handle_climbing(_delta: float) -> void:
     if climbing:
         var dir := Input.get_axis(&"up", &"down") * climb_speed
         velocity.y = dir
+        if Input.is_action_just_pressed(&"jump"):
+            climbing = false
+            velocity.x += %SideCollision.position.x * -20
+            jump()
     print(climbing)
 
 
@@ -64,6 +69,8 @@ func handle_horizontal(delta: float) -> void:
         velocity.x = move_toward(velocity.x, max_run * dir, run_reduce * mult * delta)
     else:
         velocity.x = move_toward(velocity.x, max_run * dir, run_accel * mult * delta)
+
+    walking = velocity.x != 0
 
 
 func handle_vertical(delta: float) -> void:
@@ -88,7 +95,11 @@ func handle_vertical(delta: float) -> void:
         jumping = false
 
     if is_on_floor() and Input.is_action_just_pressed(&"jump"):
-        current_jump_force = jump_speed
-        velocity.y = current_jump_force
-        var_jump_timer = var_jump_time
-        jumping = true
+        jump()
+
+
+func jump() -> void:
+    current_jump_force = jump_speed
+    velocity.y = current_jump_force
+    var_jump_timer = var_jump_time
+    jumping = true
