@@ -34,9 +34,10 @@ const run_reduce := 400.0
 const air_mult := 0.65
 
 # -- Climbing --
-const climbing_left_pos := Vector2(-4, 0)
-const climbing_right_pos := Vector2(4, 0)
 const climb_speed := 50
+const climb_cooldown := 0.1
+
+var current_climb_cooldown := 0.0
 
 func _physics_process(delta: float) -> void:
     ready_inputs()
@@ -51,16 +52,27 @@ func ready_inputs() -> void:
     dir_vec.x = roundi(Input.get_axis(&"left", &"right"))
     dir_vec.y = roundi(Input.get_axis(&"up", &"down"))
 
-func handle_climbing(_delta: float) -> void:
-    climbing = %SideDetector.has_overlapping_bodies() and Input.is_action_pressed(&"climb")
+func handle_climbing(delta: float) -> void:
+    current_climb_cooldown -= delta
+    
+    if current_climb_cooldown > 0.0:
+        return
+    
+    climbing = get_facing_detector().has_overlapping_bodies() and Input.is_action_pressed(&"climb")
     if climbing:
         velocity.y = dir_vec.y * climb_speed
         if Input.is_action_just_pressed(&"jump"):
             climbing = false
             jump()
+            current_climb_cooldown = climb_cooldown
             
+            #if dir_vec.x != 0:
+            var mult := 1 if direction[Dirs.Toward] == Dirs.Left else -1
+            if !(dir_vec.y == -1 and dir_vec.x == 0):
+                velocity.x += 100 * mult
             
-            velocity.x += %SideCollision.position.x * -100
+            #velocity.x += %SideCollision.position.x * -30
+            
     print(climbing)
 
 
@@ -107,6 +119,7 @@ func handle_vertical(delta: float) -> void:
         jumping = false
 
     if is_on_floor() and Input.is_action_just_pressed(&"jump"):
+        #hdjfkjshvsoivj
         jump()
 
 
@@ -115,20 +128,19 @@ func jump() -> void:
     velocity.y = current_jump_force
     var_jump_timer = var_jump_time
     jumping = true
+    for detector: Area2D in [$LeftDetector, $RightDetector]:
+        pass
 
 func face_direction(dir: Dirs) -> void:
     var opposite_dir := Dirs.Left if dir == Dirs.Right else Dirs.Right
-    %SideCollision.position = climbing_right_pos if dir == Dirs.Right else climbing_left_pos
+    #%SideCollision.position = climbing_right_pos if dir == Dirs.Right else climbing_left_pos
     direction = {
         Dirs.Toward: dir,
         Dirs.Away: opposite_dir,
     }
 
-#func get_move_direction() -> Dirs:
-    #var dir := Input.get_axis(&"left", &"right")
-    #if dir < 0:
-        #return Dirs.Left
-    #elif dir > 0:
-        #return Dirs.Right
-    #
-    #return direction[Dirs.Toward]
+func get_facing_detector() -> Area2D:
+    if direction[Dirs.Toward] == Dirs.Left:
+        return $LeftDetector
+    else:
+        return $RightDetector

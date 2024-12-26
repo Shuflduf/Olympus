@@ -20,11 +20,16 @@ shape = SubResource("RectangleShape2D_rpyjy")
 scale = Vector2(0.063, 0.086)
 texture = ExtResource("2_qkrlf")
 
-[node name="SideDetector" type="Area2D" parent="."]
-unique_name_in_owner = true
+[node name="LeftDetector" type="Area2D" parent="."]
 collision_layer = 0
 
-[node name="SideCollision" type="CollisionShape2D" parent="SideDetector"]
-unique_name_in_owner = true
+[node name="SideCollision" type="CollisionShape2D" parent="LeftDetector"]
 position = Vector2(-4, 0)
+shape = SubResource("RectangleShape2D_sinfm")
+
+[node name="RightDetector" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="SideCollision" type="CollisionShape2D" parent="RightDetector"]
+position = Vector2(4, 0)
 shape = SubResource("RectangleShape2D_sinfm")
